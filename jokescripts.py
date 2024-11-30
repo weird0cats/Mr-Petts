@@ -15,5 +15,5 @@ def doubleword(phrase,ref):
         string+=new[n]
     return string
 #uncomment the prints to test the functions
-print(swapcenter("hello"))
-print(doubleword("one two three",1))
+#print(swapcenter("hello"))
+#print(doubleword("one two three",1))

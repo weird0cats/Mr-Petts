@@ -1,9 +1,5 @@
-# :3
-import os
-from dotenv import load_dotenv
-import nextcord
-from nextcord.ext import commands 
-import config
+import nextcord, os, config
+from nextcord.ext import commands, application_checks
 description="""A simple management bot to fit all your needs.
 
 for any quetions reach out to me @weird0cats"""
@@ -27,4 +23,3 @@ async def help(interaction=nextcord.Interaction):
     interaction.send(embed)
 
 bot.run(config.tok)
-# Mr pipe? => |

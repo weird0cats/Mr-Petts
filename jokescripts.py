@@ -3,7 +3,7 @@ def swapcenter(str):
     spnt=int(len(str)/2)
     new=f'{str[:spnt]}a{str[spnt+1:]}'
     return new
-def doubleword(phrase,ref):
+def doubleword(phrase,ref): #I hope to god I never have to use this
     word=phrase.split()
     new=""
     for i in range(3):
@@ -16,4 +16,4 @@ def doubleword(phrase,ref):
     return string
 #uncomment the prints to test the functions
 #print(swapcenter("hello"))
-#print(doubleword("one two three",1))
+print(doubleword("one two three",1))

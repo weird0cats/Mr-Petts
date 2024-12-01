@@ -4,3 +4,4 @@ I'm making a discord bot to both relearn API magic and to learn the git platform
 > "Innovation? nah, it's one big joke!"
 
 Kinda, kinda not, we'll see!
+This project uses [Nextcord](https://nextcord.dev/), a general purpose discord API wrapper, see more in their description. 

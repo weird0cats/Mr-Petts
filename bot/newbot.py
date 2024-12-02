@@ -62,7 +62,7 @@ async def helpme(interaction:Interaction):
 @bot.slash_command(description="Claim yourself a pet! doesn't work if there is an active pet.")
 async def adopt(interaction:Interaction,name:str):
     try:
-        jsonfs.create(f'{interaction.user.id}.txt',{"name":name,'love':0})
+        jsonfs.create(f'{interaction.user.id}.jsonc',{"name":name,'love':0})
         await interaction.send(f"""Congratulations, {interaction.user.name}, you have adopted {name}!""",ephemeral=True)
     except FileExistsError:
         await interaction.send("You already have a pet!",ephemeral=True)
@@ -71,19 +71,19 @@ async def adopt(interaction:Interaction,name:str):
 @cooldowns.cooldown(1,15,bucket=cooldowns.SlashBucket.author)
 async def play(interaction:Interaction):
     try:
-        data=jsonfs.read(f'{interaction.user.id}.txt')
+        data=jsonfs.read(f'{interaction.user.id}.jsonc')
         data['love']+=1
         await interaction.send(f"You spent some time playing with {data['name']}.",ephemeral=True)
-        jsonfs.write(f'{interaction.user.id}.txt', data)
+        jsonfs.write(f'{interaction.user.id}.jsonc', data)
     except FileNotFoundError:
         await interaction.send("You don't have a pet! you can adopt one with /adopt!",ephemeral=True)
 
 @bot.slash_command(description="Abandon your pet :(")
 async def abandon(interaction:Interaction):
     try:
-        data=jsonfs.read(f'{interaction.user.id}.txt')
-        jsonfs.delete(f'{interaction.user.id}.txt')
-        await interaction.send(f"You've abandoned {data['name']}",ephemeral=True)
+        data=jsonfs.read(f'{interaction.user.id}.jsonc')
+        jsonfs.delete(f'{interaction.user.id}.jsonc')
+        await interaction.send(f"You've abandoned {data['name']}... :(",ephemeral=True)
     except FileNotFoundError:
         await interaction.send("You don't have a pet!",ephemeral=True)
 
@@ -92,7 +92,7 @@ async def abandon(interaction:Interaction):
 async def play_error(interaction:Interaction, error):
     if isinstance(error, cooldowns.exceptions.CallableOnCooldown):
         try:
-            await interaction.send(f"{jsonfs.read(f'{interaction.user.id}.txt')["name"]} is tired, wait a little bit!",ephemeral=True)
+            await interaction.send(f"{jsonfs.read(f'{interaction.user.id}.jsonc')["name"]} is tired, wait a little bit!",ephemeral=True)
         except FileNotFoundError:
             await interaction.send(f"Why are you trying to play with a pet you don't have, {interaction.user.name}?",ephemeral=True)
 

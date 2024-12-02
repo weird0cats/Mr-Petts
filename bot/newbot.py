@@ -51,13 +51,6 @@ async def test(ctx):
 async def test(interaction:Interaction):
     await interaction.send("test successful", ephemeral=True)
 
-@bot.slash_command(description='Get a list of commands')
-async def helpme(interaction:Interaction):
-    embed=nextcord.Embed(colour=0xdc143c,title='commands',description=f"""
-    {bot.command_prefix}c - "colors" - prints a list of colors
-    {bot.command_prefix}m -  - 
-    """)
-    await interaction.send(embed=embed,ephemeral=True)
 #Pet commands
 @bot.slash_command(description="Claim yourself a pet! doesn't work if there is an active pet.")
 async def adopt(interaction:Interaction,name:str):

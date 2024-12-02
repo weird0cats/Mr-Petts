@@ -1,9 +1,7 @@
-
-
-import logging, nextcord, os, config, jsonfs
+import logging, nextcord, os, cooldowns, config, jsonfs
 from nextcord import Interaction, SlashOption
 from nextcord.ext import commands, application_checks
-
+from cooldowns import SlashBucket
 #Logs 
 logger=logging.getLogger('nextcord')
 logger.setLevel(logging.DEBUG)
@@ -60,6 +58,42 @@ async def helpme(interaction:Interaction):
     {bot.command_prefix}m -  - 
     """)
     await interaction.send(embed=embed,ephemeral=True)
-#until I can fix standard commands
+#Pet commands
+@bot.slash_command(description="Claim yourself a pet! doesn't work if there is an active pet.")
+async def adopt(interaction:Interaction,name:str):
+    try:
+        jsonfs.create(f'{interaction.user.id}.txt',{"name":name,'love':0})
+        await interaction.send(f"""Congratulations, {interaction.user.name}, you have adopted {name}!""",ephemeral=True)
+    except FileExistsError:
+        await interaction.send("You already have a pet!",ephemeral=True)
+
+@bot.slash_command(description="Bond with your pet!")
+@cooldowns.cooldown(1,15,bucket=cooldowns.SlashBucket.author)
+async def play(interaction:Interaction):
+    try:
+        data=jsonfs.read(f'{interaction.user.id}.txt')
+        data['love']+=1
+        await interaction.send(f"You spent some time playing with {data['name']}.",ephemeral=True)
+        jsonfs.write(f'{interaction.user.id}.txt', data)
+    except FileNotFoundError:
+        await interaction.send("You don't have a pet! you can adopt one with /adopt!",ephemeral=True)
+
+@bot.slash_command(description="Abandon your pet :(")
+async def abandon(interaction:Interaction):
+    try:
+        data=jsonfs.read(f'{interaction.user.id}.txt')
+        jsonfs.delete(f'{interaction.user.id}.txt')
+        await interaction.send(f"You've abandoned {data['name']}",ephemeral=True)
+    except FileNotFoundError:
+        await interaction.send("You don't have a pet!",ephemeral=True)
+
+#error handler goes here 
+@play.error
+async def play_error(interaction:Interaction, error):
+    if isinstance(error, cooldowns.exceptions.CallableOnCooldown):
+        try:
+            await interaction.send(f"{jsonfs.read(f'{interaction.user.id}.txt')["name"]} is tired, wait a little bit!",ephemeral=True)
+        except FileNotFoundError:
+            await interaction.send(f"Why are you trying to play with a pet you don't have, {interaction.user.name}?",ephemeral=True)
 
 bot.run(config.tok)

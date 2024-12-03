@@ -2,6 +2,7 @@ import logging, nextcord, os, cooldowns, config, jsonfs
 from nextcord import Interaction, SlashOption
 from nextcord.ext import commands, application_checks
 from cooldowns import SlashBucket
+
 #Logs 
 logger=logging.getLogger('nextcord')
 logger.setLevel(logging.DEBUG)
@@ -19,6 +20,7 @@ logging.basicConfig(
     datefmt="%Y/%m/%d - %H:%M"
 )
 logger.addHandler(handler)
+
 # Discord bot configurations
 description="""A simple management bot to fit all your needs.
 
@@ -35,7 +37,6 @@ bot=commands.Bot(
     description=description,
     intents=intents
     )
-# End of that
 
 @bot.event
 async def on_ready():

@@ -1,5 +1,6 @@
-bot/config.py
-*.log
+**/__pycache__
+**.log
 # User data is stored in .jsonc files and .log files, i'll make that more secure later
-*.jsonc
+**.jsonc
 .venv/
+token.json
